@@ -1,12 +1,38 @@
+import 'dart:async';
 
+import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:mon_app_flutter_mdeuxiii/pages/google_map_page.dart';
 import 'package:mon_app_flutter_mdeuxiii/pages/print_custom_card.dart';
 import 'package:mon_app_flutter_mdeuxiii/pages/textPage.dart';
+import 'package:mon_app_flutter_mdeuxiii/ressources/constants.dart';
+import 'package:mon_app_flutter_mdeuxiii/ressources/dark_color.dart';
 
 import 'pages/textPage.dart';
+import 'pages/login_page.dart';
+import 'pages/print_custom_card.dart';
+import 'pages/google_map_page.dart';
 
 void main() {
+  print("debut de l'aplication");
+  const env = String.fromEnvironment("env");
+  switch (env) {
+    case "dev":
+      Constants.setEnvironnment(Environnment.DEV);
+      break;
+    case "stagging":
+      Constants.setEnvironnment(Environnment.STAGING);
+      break;
+      case "prod":
+      Constants.setEnvironnment(Environnment.PROD);
+    break;
+  }
   runApp(MyApp());
+  //c'est pour device preview ^^
+  // #DevicePreview
+  //   //
+  //runApp(DevicePreview(builder: (context) => MyApp(), enabled: true));
 }
 
 
@@ -15,6 +41,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      //locale: DevicePreview.of(context).locale, // <--- /!\ Add the locale
+      //builder: DevicePreview.appBuilder, // <--- /!\ Add  the builder
       title: 'Flutter Demo',
       theme: ThemeData(
         // This is the theme of your application.
@@ -26,8 +54,24 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
-        primarySwatch: Colors.orange,
+        //important pour changer les couleur
+          primarySwatch: Colors.orange,
+          appBarTheme: AppBarTheme(color: Colors.green)
       ),
+      darkTheme: ThemeData(
+          primarySwatch: DarkColor.materialBlue,
+          appBarTheme: AppBarTheme(color: DarkColor.materialBlue.shade100)
+      ),
+      /*
+      * #routes
+      * Ici on rajoute les ROUTE #route sinon le routage ne marche as ^^
+      * */
+      routes: <String, WidgetBuilder> {
+        TextPage.routeName : (BuildContext context) => const TextPage(),
+        PrintCustomCard.routeName : (BuildContext context) => const PrintCustomCard(),
+        LoginPage.routeName : (BuildContext context) => const LoginPage(),
+        GoogleMapPage.routeName : (BuildContext context) =>  GoogleMapPage()
+      },
       home: MaPageDAccueil(titre: "Ma page d'accueil generale"),
       //home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
@@ -61,8 +105,24 @@ class MaPageDAccueil extends StatefulWidget {
 class _MaPageDAccueilState extends State<MaPageDAccueil> {
   int _unNombre = 42;
 
+  Completer<GoogleMapController> _controller = Completer();
+
+  static final CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(37.42796133580664, -122.085749655962),
+    zoom: 14.4746,
+  );
+
   @override
   Widget build(BuildContext context) {
+    /*return new Scaffold(
+      body: GoogleMap(
+        mapType: MapType.normal,
+        initialCameraPosition: _kGooglePlex,
+        onMapCreated: (GoogleMapController controller) {
+          _controller.complete(controller);
+        },
+      ),
+    );*/
     return Scaffold(
       appBar: AppBar(
         title: Text('mon titre'),
@@ -77,14 +137,27 @@ class _MaPageDAccueilState extends State<MaPageDAccueil> {
               icon: Icon(Icons.wifi),
               onPressed: () {
                 Navigator.pushNamed(context, TextPage.routeName, arguments: {'exemple': 'la valeur de la clef exemple'  } );
-              }
+              },
+            color: DarkColor.breakedBlack,
           ),
           IconButton(
               icon: Icon(Icons.ac_unit),
               onPressed: () {
                 Navigator.pushNamed(context, PrintCustomCard.routeName, arguments: {} );
               }
-          )
+          ),
+          IconButton(
+              icon: Icon(Icons.map),
+              onPressed: () {
+                Navigator.pushNamed(context, GoogleMapPage.routeName, arguments: {} );
+              }
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pushNamed(context, PrintCustomCard.routeName, arguments: {} );
+            },
+            child: Text('bonjour ceci est un bouton'),
+          ),
         ],
         ),
       )

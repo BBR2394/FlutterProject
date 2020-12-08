@@ -26,13 +26,32 @@ dependencies:
   #dio c'est popur les requete http
   dio: ^3.0.10
 
+  #tres utile
+  device_preview: ^0.4.8
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
 
+  #24 nov
+  flutter_launcher_icons: ^0.8.1
+  # 24 NOV bis
+  # our verifier la connectivité
+  connectivity: ^2.0.2
+
+  #1er Decembre
+  google_maps_flutter: ^1.0.6
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/stardew_cocote.png"
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
 
 
 # For information on the generic Dart part of this file, see the

@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -22,11 +25,27 @@ class _LoginPageState extends State<LoginPage> {
   String toto;
   String result;
 
+  StreamSubscription<ConnectivityResult> _networkState;
+
   //CharacterHiveProvider _provider;
 
   @override
   void initState() {
+    FutureOr Function(ConnectivityResult value) value;
+    Connectivity().checkConnectivity().then((value) {
+      if (value == ConnectivityResult.mobile) {
+        // I am connected to a mobile network.
+      } else if (value == ConnectivityResult.wifi) {
+        // I am connected to a wifi network.
+      }
+    });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _networkState.cancel();
+    super.dispose();
   }
 
   //quand je rajouterais hiv

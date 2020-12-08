@@ -1,13 +1,15 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:mon_app_flutter_mdeuxiii/ressources/constants.dart';
 
 class DioHelper {
   Dio dio;
 
   // ces trois lignes permettent de faire le singleton (singleton !...)
+  // 'https://rickandmortyapi.com/api/'
   DioHelper._privateConstructor() {
-    dio ??= Dio(BaseOptions(baseUrl: 'https://rickandmortyapi.com/api/')); // veut dire : si c'est null, tu l'initialise
+    dio ??= Dio(BaseOptions(baseUrl: Constants.serverURL)); // veut dire : si c'est null, tu l'initialise
   }
   static final DioHelper _instance = DioHelper._privateConstructor();
   static DioHelper get instance => _instance;
